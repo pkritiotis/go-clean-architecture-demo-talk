@@ -5,24 +5,25 @@ import (
 	"regexp"
 )
 
-type EmailAddress string
+type emailAddress string
 
 var (
 	emailValidationRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 
+	// ErrInvalidEmail Error when the email address is invalid
 	ErrInvalidEmail = errors.New("invalid email address")
 )
 
-// NewEmailAddress Creates a new EmailAddress
-func NewEmailAddress(email string) (EmailAddress, error) {
+// newEmailAddress Creates a new emailAddress
+func newEmailAddress(email string) (emailAddress, error) {
 	//validate the email address with a regex
 	if !emailValidationRegex.MatchString(email) {
 		return "", ErrInvalidEmail
 	}
 
-	return EmailAddress(email), nil
+	return emailAddress(email), nil
 }
 
-func (e EmailAddress) String() string {
+func (e emailAddress) String() string {
 	return string(e)
 }

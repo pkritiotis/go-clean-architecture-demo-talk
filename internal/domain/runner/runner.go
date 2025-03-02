@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	// ErrRunnerNameCannotBeEmpty Error when the name of the runner is empty
 	ErrRunnerNameCannotBeEmpty = errors.New("name cannot be empty")
 )
 
@@ -16,7 +17,7 @@ var (
 type Runner struct {
 	id           uuid.UUID
 	name         string
-	emailAddress EmailAddress
+	emailAddress emailAddress
 	createdAt    time.Time
 }
 
@@ -29,7 +30,7 @@ func NewRunner(name, emailAddress string) (Runner, error) {
 	}
 
 	//validate the email address
-	email, err := NewEmailAddress(emailAddress)
+	email, err := newEmailAddress(emailAddress)
 	if err != nil {
 		return Runner{}, err
 	}

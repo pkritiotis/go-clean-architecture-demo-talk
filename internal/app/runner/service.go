@@ -1,3 +1,4 @@
+// Package runner provides an app-level service for runners use-cases
 package runner
 
 import (
@@ -37,10 +38,7 @@ func (s Service) CreateRunner(name, email string) (uuid.UUID, error) {
 		return uuid.UUID{}, err
 	}
 
-	err = s.notificationService.SendNotification(runner.EmailAddress(), "Welcome to the race tracker service!")
-	if err != nil {
-		// log the error
-	}
+	_ = s.notificationService.SendNotification(runner.EmailAddress(), "Welcome to the race tracker service!")
 
 	return runner.ID(), nil
 }
