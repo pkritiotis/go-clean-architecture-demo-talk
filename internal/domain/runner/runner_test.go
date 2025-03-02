@@ -1,32 +1,50 @@
 package runner
 
 import (
-	"reflect"
 	"testing"
 )
 
 func TestNewRunner(t *testing.T) {
-	type args struct {
-		name         string
-		emailAddress string
-	}
 	tests := []struct {
-		name    string
-		args    args
-		want    Runner
-		wantErr bool
+		name       string
+		runnerName string
+		email      string
+		wantErr    error
 	}{
-		// TODO: Add test cases.
+		{
+			name:       "Valid data",
+			runnerName: "John Doe",
+			email:      "john.doe@example.com",
+			wantErr:    nil,
+		},
+		{
+			name:       "Empty name",
+			runnerName: "",
+			email:      "john.doe@example.com",
+			wantErr:    ErrRunnerNameCannotBeEmpty,
+		},
+		{
+			name:       "Invalid email",
+			runnerName: "John Doe",
+			email:      "invalid-email",
+			wantErr:    ErrInvalidEmail,
+		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewRunner(tt.args.name, tt.args.emailAddress)
-			if (err != nil) != tt.wantErr {
+			runner, err := NewRunner(tt.runnerName, tt.email)
+			if err != tt.wantErr {
 				t.Errorf("NewRunner() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewRunner() got = %v, want %v", got, tt.want)
+			if err == nil {
+				if runner.name != tt.runnerName {
+					t.Errorf("NewRunner() name = %v, want %v", runner.name, tt.runnerName)
+				}
+				if runner.emailAddress.String() != tt.email {
+					t.Errorf("NewRunner() emailAddress = %v, want %v", runner.emailAddress.String(), tt.email)
+				}
 			}
 		})
 	}

@@ -3,30 +3,14 @@ package runner
 
 import (
 	"errors"
-	"regexp"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-type EmailAddress string
-
 var (
-	emailValidationRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
-
-	ErrInvalidEmail            = errors.New("invalid email address")
 	ErrRunnerNameCannotBeEmpty = errors.New("name cannot be empty")
 )
-
-// NewEmailAddress Creates a new EmailAddress
-func NewEmailAddress(email string) (EmailAddress, error) {
-	//validate the email address with a regex
-	if !emailValidationRegex.MatchString(email) {
-		return "", ErrInvalidEmail
-	}
-
-	return EmailAddress(email), nil
-}
 
 // Runner Model that represents the Runner
 type Runner struct {
@@ -59,4 +43,19 @@ func NewRunner(name, emailAddress string) (Runner, error) {
 		emailAddress: email,
 		createdAt:    time.Now().UTC(),
 	}, nil
+}
+
+// ID Returns the ID of the runner
+func (r Runner) ID() uuid.UUID {
+	return r.id
+}
+
+// Name Returns the name of the runner
+func (r Runner) Name() string {
+	return r.name
+}
+
+// EmailAddress Returns the email address of the runner
+func (r Runner) EmailAddress() string {
+	return r.emailAddress.String()
 }
