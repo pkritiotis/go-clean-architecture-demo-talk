@@ -2,6 +2,7 @@ package runner
 
 import (
 	"errors"
+	"github.com/pkritiotis/go-clean-architecture-example/internal/app/notification"
 	"testing"
 
 	"github.com/pkritiotis/go-clean-architecture-example/internal/domain/runner"
@@ -17,7 +18,7 @@ func TestCreateRunner(t *testing.T) {
 		notificationErr  error
 		wantErr          error
 		mockRepo         *MockRepository
-		mockNotification *MockNotificationService
+		mockNotification *notification.MockNotificationService
 	}{
 		{
 			name:            "Valid data",
@@ -31,10 +32,15 @@ func TestCreateRunner(t *testing.T) {
 				mockRepo.On("Add", mock.Anything).Return(nil)
 				return mockRepo
 			}(),
-			mockNotification: func() *MockNotificationService {
-				mockNotificationService := new(MockNotificationService)
+			mockNotification: func() *notification.MockNotificationService {
+				mockNotificationService := new(notification.MockNotificationService)
 				mockNotificationService.
-					On("SendNotification", "john.doe@example.com", "Welcome to the race tracker service!").
+					On("Notify",
+						notification.Notification{
+							EmailAddress: "john.doe@example.com",
+							Subject:      "Welcome John Doe",
+							Message:      "Welcome to the race tracker service!",
+						}).
 					Return(nil)
 				return mockNotificationService
 			}(),
@@ -50,8 +56,8 @@ func TestCreateRunner(t *testing.T) {
 				mockRepo := new(MockRepository)
 				return mockRepo
 			}(),
-			mockNotification: func() *MockNotificationService {
-				mockNotificationService := new(MockNotificationService)
+			mockNotification: func() *notification.MockNotificationService {
+				mockNotificationService := new(notification.MockNotificationService)
 				return mockNotificationService
 			}(),
 		},
@@ -64,15 +70,10 @@ func TestCreateRunner(t *testing.T) {
 			wantErr:         runner.ErrInvalidEmail,
 			mockRepo: func() *MockRepository {
 				mockRepo := new(MockRepository)
-				mockRepo.On("Add", mock.Anything).Return(nil).
-					Times(0)
 				return mockRepo
 			}(),
-			mockNotification: func() *MockNotificationService {
-				mockNotificationService := new(MockNotificationService)
-				mockNotificationService.
-					On("SendNotification", "john.doe@example.com", "Welcome to the race tracker service!").
-					Times(0)
+			mockNotification: func() *notification.MockNotificationService {
+				mockNotificationService := new(notification.MockNotificationService)
 				return mockNotificationService
 			}(),
 		},
@@ -85,14 +86,12 @@ func TestCreateRunner(t *testing.T) {
 			wantErr:         errors.New("repository error"),
 			mockRepo: func() *MockRepository {
 				mockRepo := new(MockRepository)
-				mockRepo.On("Add", mock.Anything).Return(errors.New("repository error"))
+				mockRepo.On("Add", mock.Anything).
+					Return(errors.New("repository error"))
 				return mockRepo
 			}(),
-			mockNotification: func() *MockNotificationService {
-				mockNotificationService := new(MockNotificationService)
-				mockNotificationService.
-					On("SendNotification", "john.doe@example.com", "Welcome to the race tracker service!").
-					Panic("SendNotification should not be called")
+			mockNotification: func() *notification.MockNotificationService {
+				mockNotificationService := new(notification.MockNotificationService)
 				return mockNotificationService
 			}(),
 		},
@@ -108,11 +107,15 @@ func TestCreateRunner(t *testing.T) {
 				mockRepo.On("Add", mock.Anything).Return(nil)
 				return mockRepo
 			}(),
-			mockNotification: func() *MockNotificationService {
-				mockNotificationService := new(MockNotificationService)
+			mockNotification: func() *notification.MockNotificationService {
+				mockNotificationService := new(notification.MockNotificationService)
 				mockNotificationService.
-					On("SendNotification", "john.doe@example.com", "Welcome to the race tracker service!").
-					Return(errors.New("notification error"))
+					On("Notify",
+						notification.Notification{
+							EmailAddress: "john.doe@example.com",
+							Subject:      "Welcome John Doe",
+							Message:      "Welcome to the race tracker service!",
+						}).Return(errors.New("notification error"))
 				return mockNotificationService
 			}(),
 		},
@@ -140,14 +143,5 @@ type MockRepository struct {
 
 func (m *MockRepository) Add(r runner.Runner) error {
 	args := m.Called(r)
-	return args.Error(0)
-}
-
-type MockNotificationService struct {
-	mock.Mock
-}
-
-func (m *MockNotificationService) SendNotification(emailAddress string, message string) error {
-	args := m.Called(emailAddress, message)
 	return args.Error(0)
 }

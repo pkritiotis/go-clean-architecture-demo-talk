@@ -2,26 +2,24 @@
 package runner
 
 import (
+	"fmt"
 	"github.com/google/uuid"
+	"github.com/pkritiotis/go-clean-architecture-example/internal/app/notification"
 	"github.com/pkritiotis/go-clean-architecture-example/internal/domain/runner"
 )
 
 // Service provides runner operations.
 type Service struct {
 	repo                repository
-	notificationService notificationService
+	notificationService notification.Service
 }
 
 type repository interface {
 	Add(runner runner.Runner) error
 }
 
-type notificationService interface {
-	SendNotification(emailAddress string, message string) error
-}
-
 // NewService creates a new runner service.
-func NewService(repo repository, notificationService notificationService) Service {
+func NewService(repo repository, notificationService notification.Service) Service {
 	return Service{repo: repo, notificationService: notificationService}
 }
 
@@ -38,7 +36,13 @@ func (s Service) CreateRunner(name, email string) (uuid.UUID, error) {
 		return uuid.UUID{}, err
 	}
 
-	_ = s.notificationService.SendNotification(runner.EmailAddress(), "Welcome to the race tracker service!")
+	_ = s.notificationService.Notify(
+		notification.Notification{
+			EmailAddress: runner.EmailAddress(),
+			Subject:      fmt.Sprintf("Welcome %s", runner.Name()),
+			Message:      "Welcome to the race tracker service!",
+		},
+	)
 
 	return runner.ID(), nil
 }

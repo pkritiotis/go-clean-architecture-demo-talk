@@ -4,6 +4,7 @@ package http
 import (
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/pkritiotis/go-clean-architecture-example/internal/app"
 	"log"
 	"net/http"
 
@@ -22,8 +23,8 @@ type Server struct {
 }
 
 // NewServer HTTP Server constructor
-func NewServer(runnerService runnerService) *Server {
-	httpServer := &Server{runnerService: runnerService}
+func NewServer(appServices app.Services) *Server {
+	httpServer := &Server{runnerService: appServices.RunnerService}
 	httpServer.router = mux.NewRouter()
 	httpServer.AddRunnerHTTPRoutes()
 	http.Handle("/", httpServer.router)
