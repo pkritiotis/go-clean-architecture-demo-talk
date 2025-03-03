@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-// RaceLog represents a logged race result for a participant
-type RaceLog struct {
+// Result represents a race record for a participant
+type Result struct {
 	id           uuid.UUID
 	runnerID     uuid.UUID
 	raceID       uuid.UUID
@@ -18,25 +18,25 @@ type RaceLog struct {
 	loggedAt     time.Time
 }
 
-// NewRaceLog creates a new RaceLog entity and validates the input
-func NewRaceLog(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float64, heartRateAvg int, notes string) (RaceLog, error) {
+// NewRecord creates a new Result entity and validates the input
+func NewRecord(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float64, heartRateAvg int, notes string) (Result, error) {
 	if runnerID == uuid.Nil {
-		return RaceLog{}, fmt.Errorf("runnerID cannot be empty")
+		return Result{}, fmt.Errorf("runnerID cannot be empty")
 	}
 	if raceID == uuid.Nil {
-		return RaceLog{}, fmt.Errorf("raceID cannot be empty")
+		return Result{}, fmt.Errorf("raceID cannot be empty")
 	}
 	if finishTime <= 0 {
-		return RaceLog{}, fmt.Errorf("finishTime must be greater than 0")
+		return Result{}, fmt.Errorf("finishTime must be greater than 0")
 	}
 	if pace <= 0 {
-		return RaceLog{}, fmt.Errorf("pace must be greater than 0")
+		return Result{}, fmt.Errorf("pace must be greater than 0")
 	}
 	if heartRateAvg < 0 {
-		return RaceLog{}, fmt.Errorf("heartRateAvg cannot be negative")
+		return Result{}, fmt.Errorf("heartRateAvg cannot be negative")
 	}
 
-	return RaceLog{
+	return Result{
 		id:           uuid.New(),
 		runnerID:     runnerID,
 		raceID:       raceID,
@@ -48,42 +48,42 @@ func NewRaceLog(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float
 	}, nil
 }
 
-// ID returns the race log ID
-func (r RaceLog) ID() uuid.UUID {
+// ID returns the racetracker log ID
+func (r Result) ID() uuid.UUID {
 	return r.id
 }
 
 // RunnerID returns the runner ID
-func (r RaceLog) RunnerID() uuid.UUID {
+func (r Result) RunnerID() uuid.UUID {
 	return r.runnerID
 }
 
-// RaceID returns the race ID
-func (r RaceLog) RaceID() uuid.UUID {
+// RaceID returns the racetracker ID
+func (r Result) RaceID() uuid.UUID {
 	return r.raceID
 }
 
 // FinishTime returns the finish time
-func (r RaceLog) FinishTime() time.Duration {
+func (r Result) FinishTime() time.Duration {
 	return r.finishTime
 }
 
 // Pace returns the pace
-func (r RaceLog) Pace() float64 {
+func (r Result) Pace() float64 {
 	return r.pace
 }
 
 // HeartRateAvg returns the average heart rate
-func (r RaceLog) HeartRateAvg() int {
+func (r Result) HeartRateAvg() int {
 	return r.heartRateAvg
 }
 
 // Notes returns the notes
-func (r RaceLog) Notes() string {
+func (r Result) Notes() string {
 	return r.notes
 }
 
 // LoggedAt returns the logged at time
-func (r RaceLog) LoggedAt() time.Time {
+func (r Result) LoggedAt() time.Time {
 	return r.loggedAt
 }

@@ -1,3 +1,4 @@
+// Package race contains the domain entities for race tracking purposes
 package race
 
 import (
@@ -6,7 +7,7 @@ import (
 	"time"
 )
 
-// Race represents a race event (e.g., marathon, trail run, climbing competition)
+// Race represents a racetracker event (e.g., marathon, trail run, climbing competition)
 type Race struct {
 	id            uuid.UUID
 	name          string
@@ -41,32 +42,32 @@ func NewRace(name, location string, date time.Time, distanceKm, elevationGain fl
 	}, nil
 }
 
-// ID returns the race ID
+// ID returns the racetracker ID
 func (r Race) ID() uuid.UUID {
 	return r.id
 }
 
-// Name returns the race name
+// Name returns the racetracker name
 func (r Race) Name() string {
 	return r.name
 }
 
-// Location returns the race location
+// Location returns the racetracker location
 func (r Race) Location() string {
 	return r.location
 }
 
-// Date returns the race date
+// Date returns the racetracker date
 func (r Race) Date() time.Time {
 	return r.date
 }
 
-// DistanceKm returns the race distance in kilometers
+// DistanceKm returns the racetracker distance in kilometers
 func (r Race) DistanceKm() float64 {
 	return r.distanceKm
 }
 
-// ElevationGain returns the race elevation gain
+// ElevationGain returns the racetracker elevation gain
 func (r Race) ElevationGain() float64 {
 	return r.elevationGain
 }

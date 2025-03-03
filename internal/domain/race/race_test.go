@@ -21,7 +21,7 @@ func TestNewRace(t *testing.T) {
 		errorMessage  string
 	}{
 		{
-			name:          "Valid race",
+			name:          "Valid racetracker",
 			raceName:      "Marathon",
 			location:      "Athens",
 			date:          now,

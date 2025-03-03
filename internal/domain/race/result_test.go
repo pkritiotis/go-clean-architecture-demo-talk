@@ -24,7 +24,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good race",
+			notes:        "Good racetracker",
 			wantErr:      "runnerID cannot be empty",
 		},
 		{
@@ -34,7 +34,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good race",
+			notes:        "Good racetracker",
 			wantErr:      "raceID cannot be empty",
 		},
 		{
@@ -44,7 +44,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   0,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good race",
+			notes:        "Good racetracker",
 			wantErr:      "finishTime must be greater than 0",
 		},
 		{
@@ -54,7 +54,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         0,
 			heartRateAvg: 150,
-			notes:        "Good race",
+			notes:        "Good racetracker",
 			wantErr:      "pace must be greater than 0",
 		},
 		{
@@ -64,24 +64,24 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: -1,
-			notes:        "Good race",
+			notes:        "Good racetracker",
 			wantErr:      "heartRateAvg cannot be negative",
 		},
 		{
-			name:         "Valid RaceLog creation",
+			name:         "Valid Result creation",
 			runnerID:     uuid.New(),
 			raceID:       uuid.New(),
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good race",
+			notes:        "Good racetracker",
 			wantErr:      "",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			raceLog, err := NewRaceLog(tt.runnerID, tt.raceID, tt.finishTime, tt.pace, tt.heartRateAvg, tt.notes)
+			raceLog, err := NewRecord(tt.runnerID, tt.raceID, tt.finishTime, tt.pace, tt.heartRateAvg, tt.notes)
 			if tt.wantErr != "" {
 				if err == nil || err.Error() != tt.wantErr {
 					t.Errorf("expected error '%v', got %v", tt.wantErr, err)
