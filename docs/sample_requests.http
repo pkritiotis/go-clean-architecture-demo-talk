@@ -1,0 +1,44 @@
+### POST a race
+POST http://127.0.0.1:8080/races
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "{{$random.ancient.god}}",
+  "location": "{{$random.address.city}}",
+  "date": "{{$isoTimestamp}}",
+  "distance_km": {{$random.number.digit}}{{$random.number.digit}},
+  "elevation_gain": {{$random.number.digit}}{{$random.number.digit}}{{$random.number.digit}}
+}
+
+> {% client.global.set("raceId", response.body) %}
+
+### POST a runner
+POST http://127.0.0.1:8080/runners
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Panayiotis",
+  "email_address": "pkritiotis@gmail.com"
+}
+
+> {% client.global.set("runnerId", response.body) %}
+
+
+### POST result
+POST http://127.0.0.1:8080/races/{{raceId}}/results
+Accept: application/json
+Content-Type: application/json
+
+{
+  "runner_id": "{{runnerId}}",
+  "race_id": "{{raceId}}",
+  "finish_time_ms": 3600000,
+  "heart_rate_avg": 150,
+  "notes": "Felt good throughout the race"
+}
+
+### GET all
+GET http://127.0.0.1:8080/races?runner_id={{runnerId}}
+Accept: application/json
