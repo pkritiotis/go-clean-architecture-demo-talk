@@ -39,7 +39,7 @@ func TestCreateRunner(t *testing.T) {
 						notification.Notification{
 							EmailAddress: "john.doe@example.com",
 							Subject:      "Welcome John Doe",
-							Message:      "Welcome to the racetracker tracker service!",
+							Message:      "Welcome to the race tracker service!",
 						}).
 					Return(nil)
 				return mockNotificationService
@@ -114,7 +114,7 @@ func TestCreateRunner(t *testing.T) {
 						notification.Notification{
 							EmailAddress: "john.doe@example.com",
 							Subject:      "Welcome John Doe",
-							Message:      "Welcome to the racetracker tracker service!",
+							Message:      "Welcome to the race tracker service!",
 						}).Return(errors.New("notification error"))
 				return mockNotificationService
 			}(),

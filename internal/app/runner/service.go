@@ -40,7 +40,7 @@ func (s Service) CreateRunner(name, email string) (uuid.UUID, error) {
 		notification.Notification{
 			EmailAddress: runner.EmailAddress(),
 			Subject:      fmt.Sprintf("Welcome %s", runner.Name()),
-			Message:      "Welcome to the racetracker tracker service!",
+			Message:      "Welcome to the race tracker service!",
 		},
 	)
 

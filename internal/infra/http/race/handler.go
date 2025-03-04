@@ -1,20 +1,22 @@
-package racetracker
+// Package race contains the http handlers of the race tracker service
+package race
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/pkritiotis/go-clean-architecture-example/internal/app/racetracker"
+	"github.com/pkritiotis/go-clean-architecture-example/internal/app/race"
 	"net/http"
 	"time"
 )
 
 type raceTrackerService interface {
 	CreateRace(name, location string, date time.Time, distanceKm, elevationGain float64) (uuid.UUID, error)
-	AddResult(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float64, heartRateAvg int, notes string) (uuid.UUID, error)
+	AddResult(runnerID, raceID uuid.UUID, finishTime time.Duration, heartRateAvg int, notes string) (uuid.UUID, error)
+	GetResults(runnerID uuid.UUID) ([]race.ResultItem, error)
 }
 
-// Handler RaceTracker http request service
+// Handler raceTracker http request service
 type Handler struct {
 	raceTrackerService raceTrackerService
 }
@@ -53,7 +55,7 @@ func (h Handler) CreateRace(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		switch err {
-		case racetracker.ErrEmptyRaceID, racetracker.ErrEmptyRunnerID, racetracker.ErrInvalidAvgHR, racetracker.ErrInvalidFinishTime:
+		case race.ErrEmptyRaceID, race.ErrEmptyRunnerID, race.ErrInvalidAvgHR, race.ErrInvalidFinishTime:
 			w.WriteHeader(http.StatusBadRequest)
 		default:
 			w.WriteHeader(http.StatusInternalServerError)
@@ -106,7 +108,6 @@ func (h Handler) AddResult(w http.ResponseWriter, r *http.Request) {
 		runnerID,
 		raceID,
 		finishTime,
-		resultRequest.Pace,
 		resultRequest.HeartRateAvg,
 		resultRequest.Notes,
 	)
@@ -119,4 +120,56 @@ func (h Handler) AddResult(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte(id.String()))
 	w.WriteHeader(http.StatusOK)
+}
+
+// ResultResponse represents the response model for race results
+type ResultResponse struct {
+	ID           uuid.UUID `json:"id"`
+	RunnerID     uuid.UUID `json:"runner_id"`
+	RaceID       uuid.UUID `json:"race_id"`
+	FinishTime   int64     `json:"finish_time_ms"`
+	Pace         float64   `json:"pace"`
+	HeartRateAvg int       `json:"heart_rate_avg"`
+	Notes        string    `json:"notes"`
+}
+
+// GetRaceResults handles requests to retrieve race results for a runner
+func (h Handler) GetRaceResults(w http.ResponseWriter, r *http.Request) {
+	runnerIDStr := r.URL.Query().Get("runner_id")
+	if runnerIDStr == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, "runner_id query parameter is required")
+		return
+	}
+
+	runnerID, err := uuid.Parse(runnerIDStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, "Invalid runner ID format")
+		return
+	}
+
+	results, err := h.raceTrackerService.GetResults(runnerID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err.Error())
+		return
+	}
+
+	response := make([]ResultResponse, len(results))
+	for i, result := range results {
+		response[i] = ResultResponse{
+			ID:           result.ID,
+			RunnerID:     result.RunnerID,
+			RaceID:       result.RaceID,
+			FinishTime:   result.FinishTime.Milliseconds(),
+			Pace:         result.Pace,
+			HeartRateAvg: result.HeartRateAvg,
+			Notes:        result.Notes,
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
 }

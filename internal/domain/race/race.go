@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Race represents a racetracker event (e.g., marathon, trail run, climbing competition)
+// Race represents a race event (e.g., marathon, half-marathon, trail run)
 type Race struct {
 	id            uuid.UUID
 	name          string
@@ -42,32 +42,32 @@ func NewRace(name, location string, date time.Time, distanceKm, elevationGain fl
 	}, nil
 }
 
-// ID returns the racetracker ID
+// ID returns the race ID
 func (r Race) ID() uuid.UUID {
 	return r.id
 }
 
-// Name returns the racetracker name
+// Name returns the race name
 func (r Race) Name() string {
 	return r.name
 }
 
-// Location returns the racetracker location
+// Location returns the race location
 func (r Race) Location() string {
 	return r.location
 }
 
-// Date returns the racetracker date
+// Date returns the race date
 func (r Race) Date() time.Time {
 	return r.date
 }
 
-// DistanceKm returns the racetracker distance in kilometers
+// DistanceKm returns the race distance in kilometers
 func (r Race) DistanceKm() float64 {
 	return r.distanceKm
 }
 
-// ElevationGain returns the racetracker elevation gain
+// ElevationGain returns the race elevation gain
 func (r Race) ElevationGain() float64 {
 	return r.elevationGain
 }

@@ -24,7 +24,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good racetracker",
+			notes:        "Good race",
 			wantErr:      "runnerID cannot be empty",
 		},
 		{
@@ -34,7 +34,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good racetracker",
+			notes:        "Good race",
 			wantErr:      "raceID cannot be empty",
 		},
 		{
@@ -44,7 +44,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   0,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good racetracker",
+			notes:        "Good race",
 			wantErr:      "finishTime must be greater than 0",
 		},
 		{
@@ -54,7 +54,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         0,
 			heartRateAvg: 150,
-			notes:        "Good racetracker",
+			notes:        "Good race",
 			wantErr:      "pace must be greater than 0",
 		},
 		{
@@ -64,7 +64,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: -1,
-			notes:        "Good racetracker",
+			notes:        "Good race",
 			wantErr:      "heartRateAvg cannot be negative",
 		},
 		{
@@ -74,7 +74,7 @@ func TestRaceLogValidation(t *testing.T) {
 			finishTime:   time.Hour,
 			pace:         5.0,
 			heartRateAvg: 150,
-			notes:        "Good racetracker",
+			notes:        "Good race",
 			wantErr:      "",
 		},
 	}

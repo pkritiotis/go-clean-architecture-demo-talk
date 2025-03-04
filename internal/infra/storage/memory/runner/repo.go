@@ -1,5 +1,5 @@
-// Package memory implements the Repository Interface to provide an in-memory storage provider
-package memory
+// Package runner implements the Repository Interface to provide an in-memory storage provider
+package runner
 
 import (
 	"fmt"
@@ -13,8 +13,8 @@ type Repo struct {
 	runners map[uuid.UUID]runner.Runner
 }
 
-// NewRepo Constructor
-func NewRepo() Repo {
+// NewRepository Constructor
+func NewRepository() Repo {
 	runners := make(map[uuid.UUID]runner.Runner)
 	return Repo{runners}
 }

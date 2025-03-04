@@ -1,4 +1,4 @@
-package racetracker
+package race
 
 import (
 	"testing"
@@ -13,6 +13,11 @@ import (
 // Mock repository
 type mockRaceRepository struct {
 	mock.Mock
+}
+
+func (m *mockRaceRepository) SaveRace(race race.Race) error {
+	args := m.Called(race)
+	return args.Error(0)
 }
 
 func (m *mockRaceRepository) GetRace(raceID uuid.UUID) (race.Race, error) {
@@ -59,7 +64,7 @@ func TestService_LogRace(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name:       "empty runnerID",
+			name:       "empty RunnerID",
 			runnerID:   uuid.Nil,
 			raceID:     uuid.New(),
 			finishTime: 30 * time.Minute,
@@ -74,7 +79,7 @@ func TestService_LogRace(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockSetup()
-			_, err := service.SaveRaceResult(tt.runnerID, tt.raceID, tt.finishTime, tt.avgHR, tt.notes)
+			_, err := service.AddResult(tt.runnerID, tt.raceID, tt.finishTime, tt.avgHR, tt.notes)
 			assert.Equal(t, tt.wantErr, err)
 		})
 	}
@@ -94,12 +99,12 @@ func TestService_GetRaceLogs(t *testing.T) {
 			name:     "valid input",
 			runnerID: uuid.New(),
 			mockSetup: func() {
-				mockRepo.On("GetRaceResults", mock.Anything).Return([]race.Result{}, nil)
+				mockRepo.On("GetResults", mock.Anything).Return([]race.Result{}, nil)
 			},
 			wantErr: nil,
 		},
 		{
-			name:      "empty runnerID",
+			name:      "empty RunnerID",
 			runnerID:  uuid.Nil,
 			mockSetup: func() {},
 			wantErr:   ErrEmptyRunnerID,
@@ -110,7 +115,7 @@ func TestService_GetRaceLogs(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockSetup()
-			_, err := service.GetRaceResults(tt.runnerID)
+			_, err := service.GetResults(tt.runnerID)
 			assert.Equal(t, tt.wantErr, err)
 		})
 	}

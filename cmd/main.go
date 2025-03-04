@@ -11,7 +11,7 @@ func main() {
 	infraProviders := infra.NewInfraProviders()
 
 	//Initialize the application services using the infrastructure provider implementations
-	appServices := app.NewServices(infraProviders.RunnerRepository, infraProviders.NotificationService)
+	appServices := app.NewServices(infraProviders.RunnerRepository, infraProviders.RaceRepository, infraProviders.NotificationService)
 
 	//Initialize the HTTP server that calls the application services
 	infraHTTPServer := infra.NewHTTPServer(appServices)

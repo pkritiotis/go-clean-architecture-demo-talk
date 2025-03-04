@@ -48,7 +48,7 @@ func NewRecord(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float6
 	}, nil
 }
 
-// ID returns the racetracker log ID
+// ID returns the race log ID
 func (r Result) ID() uuid.UUID {
 	return r.id
 }
@@ -58,7 +58,7 @@ func (r Result) RunnerID() uuid.UUID {
 	return r.runnerID
 }
 
-// RaceID returns the racetracker ID
+// RaceID returns the race ID
 func (r Result) RaceID() uuid.UUID {
 	return r.raceID
 }
