@@ -99,7 +99,7 @@ func TestService_GetRaceLogs(t *testing.T) {
 			name:     "valid input",
 			runnerID: uuid.New(),
 			mockSetup: func() {
-				mockRepo.On("GetResults", mock.Anything).Return([]race.Result{}, nil)
+				mockRepo.On("GetRaceResults", mock.Anything).Return([]race.Result{}, nil)
 			},
 			wantErr: nil,
 		},
