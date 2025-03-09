@@ -4,11 +4,11 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "{{$random.ancient.god}}",
-  "location": "{{$random.address.city}}",
-  "date": "{{$isoTimestamp}}",
-  "distance_km": {{$random.number.digit}}{{$random.number.digit}},
-  "elevation_gain": {{$random.number.digit}}{{$random.number.digit}}{{$random.number.digit}}
+  "name": "Pan",
+  "location": "Athens",
+  "date": "2025-03-09T23:02:31.568395Z",
+  "distance_km": 21,
+  "elevation_gain": 1000
 }
 
 > {% client.global.set("raceId", response.body) %}
