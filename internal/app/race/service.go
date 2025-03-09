@@ -106,22 +106,12 @@ func (s Service) GetResults(runnerID uuid.UUID) ([]ResultItem, error) {
 }
 
 func (s Service) CreateRace(name, location string, date time.Time, distanceKm, elevationGain float64) (uuid.UUID, error) {
-	if name == "" {
-		return uuid.Nil, errors.New("race name cannot be empty")
-	}
-	if location == "" {
-		return uuid.Nil, errors.New("race location cannot be empty")
-	}
-	if distanceKm <= 0 {
-		return uuid.Nil, errors.New("distance must be greater than zero")
-	}
-	if elevationGain < 0 {
-		return uuid.Nil, errors.New("elevation gain cannot be negative")
+	race, err := race.NewRace(name, location, date, distanceKm, elevationGain)
+	if err != nil {
+		return uuid.Nil, err
 	}
 
-	race, _ := race.NewRace(name, location, date, distanceKm, elevationGain)
-
-	err := s.repo.SaveRace(race)
+	err = s.repo.SaveRace(race)
 	if err != nil {
 		return uuid.Nil, err
 	}

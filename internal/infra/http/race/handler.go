@@ -3,6 +3,7 @@ package race
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/pkritiotis/go-clean-architecture-example/internal/app/race"
@@ -113,6 +114,12 @@ func (h Handler) AddResult(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
+		if errors.Is(err, race.ErrEmptyRunnerID) || errors.Is(err, race.ErrEmptyRaceID) || errors.Is(err, race.ErrInvalidFinishTime) || errors.Is(err, race.ErrInvalidAvgHR) {
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err.Error())
 		return

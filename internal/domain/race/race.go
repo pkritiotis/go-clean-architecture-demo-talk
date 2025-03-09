@@ -2,9 +2,16 @@
 package race
 
 import (
-	"fmt"
+	"errors"
 	"github.com/google/uuid"
 	"time"
+)
+
+var (
+	ErrEmptyName            = errors.New("name cannot be empty")
+	ErrEmptyLocation        = errors.New("location cannot be empty")
+	ErrInvalidDistanceKm    = errors.New("distanceKm must be greater than 0")
+	ErrInvalidElevationGain = errors.New("elevationGain cannot be negative")
 )
 
 // Race represents a race event (e.g., marathon, half-marathon, trail run)
@@ -20,16 +27,16 @@ type Race struct {
 // NewRace creates a new Race entity and validates the input
 func NewRace(name, location string, date time.Time, distanceKm, elevationGain float64) (Race, error) {
 	if name == "" {
-		return Race{}, fmt.Errorf("name cannot be empty")
+		return Race{}, ErrEmptyName
 	}
 	if location == "" {
-		return Race{}, fmt.Errorf("location cannot be empty")
+		return Race{}, ErrEmptyLocation
 	}
 	if distanceKm <= 0 {
-		return Race{}, fmt.Errorf("distanceKm must be greater than 0")
+		return Race{}, ErrInvalidDistanceKm
 	}
 	if elevationGain < 0 {
-		return Race{}, fmt.Errorf("elevationGain cannot be negative")
+		return Race{}, ErrInvalidElevationGain
 	}
 
 	return Race{

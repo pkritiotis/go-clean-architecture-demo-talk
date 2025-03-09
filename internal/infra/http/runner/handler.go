@@ -3,8 +3,10 @@ package runner
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	domainRunner "github.com/pkritiotis/go-clean-architecture-example/internal/domain/runner"
 	"net/http"
 )
 
@@ -38,8 +40,13 @@ func (c Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id, err := c.runnerService.CreateRunner(runnerToAdd.Name, runnerToAdd.EmailAddress)
+	//todo add validation for wrong name
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		if errors.Is(err, domainRunner.ErrInvalidEmail) || errors.Is(err, domainRunner.ErrRunnerNameCannotBeEmpty) {
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		fmt.Fprint(w, err.Error())
 		return
 	}
