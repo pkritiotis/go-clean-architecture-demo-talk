@@ -106,15 +106,15 @@ func (s Service) GetResults(runnerID uuid.UUID) ([]ResultItem, error) {
 }
 
 func (s Service) CreateRace(name, location string, date time.Time, distanceKm, elevationGain float64) (uuid.UUID, error) {
-	race, err := race.NewRace(name, location, date, distanceKm, elevationGain)
+	r, err := race.NewRace(name, location, date, distanceKm, elevationGain)
 	if err != nil {
 		return uuid.Nil, err
 	}
 
-	err = s.repo.SaveRace(race)
+	err = s.repo.SaveRace(r)
 	if err != nil {
 		return uuid.Nil, err
 	}
 
-	return race.ID(), nil
+	return r.ID(), nil
 }
