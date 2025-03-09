@@ -10,12 +10,12 @@ import (
 
 // Repo Implements the Repository Interface to provide an in-memory storage provider
 type Repo struct {
-	runners map[uuid.UUID]runner.Runner
+	runners map[uuid.UUID]*runner.Runner
 }
 
 // NewRepository Constructor
 func NewRepository() Repo {
-	runners := make(map[uuid.UUID]runner.Runner)
+	runners := make(map[uuid.UUID]*runner.Runner)
 	return Repo{runners}
 }
 
@@ -25,18 +25,18 @@ func (m Repo) GetByID(id uuid.UUID) (*runner.Runner, error) {
 	if !ok {
 		return nil, nil
 	}
-	return &r, nil
+	return r, nil
 }
 
 // GetAll Returns all stored runners
-func (m Repo) GetAll() ([]runner.Runner, error) {
+func (m Repo) GetAll() ([]*runner.Runner, error) {
 	keys := make([]uuid.UUID, 0)
 
 	for key := range m.runners {
 		keys = append(keys, key)
 	}
 
-	var values []runner.Runner
+	var values []*runner.Runner
 	for _, value := range m.runners {
 		values = append(values, value)
 	}
@@ -44,13 +44,13 @@ func (m Repo) GetAll() ([]runner.Runner, error) {
 }
 
 // Add the provided runner
-func (m Repo) Add(runner runner.Runner) error {
+func (m Repo) Add(runner *runner.Runner) error {
 	m.runners[runner.ID()] = runner
 	return nil
 }
 
 // Update the provided runner
-func (m Repo) Update(runner runner.Runner) error {
+func (m Repo) Update(runner *runner.Runner) error {
 	m.runners[runner.ID()] = runner
 	return nil
 }

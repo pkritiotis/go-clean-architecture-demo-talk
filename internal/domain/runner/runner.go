@@ -22,23 +22,23 @@ type Runner struct {
 }
 
 // NewRunner Creates a new Runner
-func NewRunner(name, emailAddress string) (Runner, error) {
+func NewRunner(name, emailAddress string) (*Runner, error) {
 
 	//validate the name
 	if name == "" {
-		return Runner{}, ErrRunnerNameCannotBeEmpty
+		return nil, ErrRunnerNameCannotBeEmpty
 	}
 
 	//validate the email address
 	email, err := newEmailAddress(emailAddress)
 	if err != nil {
-		return Runner{}, err
+		return nil, err
 	}
 
 	//create a new UUID for the runner
 	id := uuid.New()
 
-	return Runner{
+	return &Runner{
 		id:           id,
 		name:         name,
 		emailAddress: email,
@@ -46,17 +46,53 @@ func NewRunner(name, emailAddress string) (Runner, error) {
 	}, nil
 }
 
+// LoadRunner Loads an existing Runner
+func LoadRunner(id uuid.UUID, name, emailAddress string, createdAt time.Time) (*Runner, error) {
+
+	//validate the name
+	if name == "" {
+		return nil, ErrRunnerNameCannotBeEmpty
+	}
+
+	//validate the email address
+	email, err := newEmailAddress(emailAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Runner{
+		id:           id,
+		name:         name,
+		emailAddress: email,
+		createdAt:    createdAt,
+	}, nil
+}
+
+// Rename Runner
+func (r *Runner) Rename(name string) error {
+	if name == "" {
+		return ErrRunnerNameCannotBeEmpty
+	}
+	r.name = name
+	return nil
+}
+
 // ID Returns the ID of the runner
-func (r Runner) ID() uuid.UUID {
+func (r *Runner) ID() uuid.UUID {
 	return r.id
 }
 
 // Name Returns the name of the runner
-func (r Runner) Name() string {
+func (r *Runner) Name() string {
 	return r.name
 }
 
 // EmailAddress Returns the email address of the runner
-func (r Runner) EmailAddress() string {
+func (r *Runner) EmailAddress() string {
 	return r.emailAddress.String()
+}
+
+// CreatedAt Returns the creation date of the runner
+func (r *Runner) CreatedAt() any {
+	return r.createdAt
 }

@@ -16,7 +16,7 @@ func TestNewRepo(t *testing.T) {
 		{
 			name: "Should create an inmemory memory",
 			want: Repo{
-				runners: make(map[uuid.UUID]runner.Runner),
+				runners: make(map[uuid.UUID]*runner.Runner),
 			},
 		},
 	}
@@ -30,10 +30,10 @@ func TestNewRepo(t *testing.T) {
 
 func Test_inMemoryRepo_AddRunner(t *testing.T) {
 	type fields struct {
-		runners map[uuid.UUID]runner.Runner
+		runners map[uuid.UUID]*runner.Runner
 	}
 	type args struct {
-		runner runner.Runner
+		runner *runner.Runner
 	}
 	tests := []struct {
 		name    string
@@ -44,10 +44,10 @@ func Test_inMemoryRepo_AddRunner(t *testing.T) {
 		{
 			name: "should add runner",
 			fields: fields{
-				runners: make(map[uuid.UUID]runner.Runner),
+				runners: make(map[uuid.UUID]*runner.Runner),
 			},
 			args: args{
-				runner: func() runner.Runner {
+				runner: func() *runner.Runner {
 					r, _ := runner.NewRunner("John Doe", "johndoe@email.com")
 					return r
 				}(),

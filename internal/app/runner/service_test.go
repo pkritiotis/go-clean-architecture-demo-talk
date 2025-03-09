@@ -2,6 +2,7 @@ package runner
 
 import (
 	"errors"
+	"github.com/google/uuid"
 	"github.com/pkritiotis/go-clean-architecture-example/internal/app/notification"
 	"testing"
 
@@ -141,7 +142,17 @@ type MockRepository struct {
 	mock.Mock
 }
 
-func (m *MockRepository) Add(r runner.Runner) error {
+func (m *MockRepository) Add(r *runner.Runner) error {
+	args := m.Called(r)
+	return args.Error(0)
+}
+
+func (m *MockRepository) GetByID(id uuid.UUID) (*runner.Runner, error) {
+	args := m.Called(id)
+	return args.Get(0).(*runner.Runner), args.Error(1)
+}
+
+func (m *MockRepository) Update(r *runner.Runner) error {
 	args := m.Called(r)
 	return args.Error(0)
 }

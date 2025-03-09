@@ -43,7 +43,7 @@ func (s Service) AddResult(runnerID, raceID uuid.UUID, finishTime time.Duration,
 		return uuid.Nil, ErrInvalidAvgHR
 	}
 
-	// Get race details to calculate Pace
+	// GetByID race details to calculate Pace
 	raceDetails, err := s.repo.GetRace(raceID)
 	if err != nil {
 		return uuid.Nil, err
