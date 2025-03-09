@@ -40,7 +40,6 @@ func (c Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id, err := c.runnerService.CreateRunner(runnerToAdd.Name, runnerToAdd.EmailAddress)
-	//todo add validation for wrong name
 	if err != nil {
 		if errors.Is(err, domainRunner.ErrInvalidEmail) || errors.Is(err, domainRunner.ErrRunnerNameCannotBeEmpty) {
 			w.WriteHeader(http.StatusBadRequest)
