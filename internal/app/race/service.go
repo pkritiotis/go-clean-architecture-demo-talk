@@ -43,17 +43,17 @@ func (s Service) AddResult(runnerID, raceID uuid.UUID, finishTime time.Duration,
 		return uuid.Nil, ErrInvalidAvgHR
 	}
 
-	// GetByID race details to calculate Pace
+	// GetByID race details to calculate PaceMinPerKm
 	raceDetails, err := s.repo.GetRace(raceID)
 	if err != nil {
 		return uuid.Nil, err
 	}
 
-	// Calculate Pace (minutes per km)
-	pace := float64(finishTime.Minutes()) / raceDetails.DistanceKm()
+	// Calculate PaceMinPerKm (minutes per km)
+	paceMinPerKm := float64(finishTime.Minutes()) / raceDetails.DistanceKm()
 
 	// Create and store the race log
-	raceLog, err := race.NewRecord(runnerID, raceID, finishTime, pace, avgHR, notes)
+	raceLog, err := race.NewResult(runnerID, raceID, finishTime, paceMinPerKm, avgHR, notes)
 	if err != nil {
 		return uuid.Nil, err
 	}
@@ -73,7 +73,7 @@ type ResultItem struct {
 	RunnerID     uuid.UUID
 	RaceID       uuid.UUID
 	FinishTime   time.Duration
-	Pace         float64 // min/km
+	PaceMinPerKm float64
 	HeartRateAvg int
 	Notes        string
 }
@@ -96,7 +96,7 @@ func (s Service) GetResults(runnerID uuid.UUID) ([]ResultItem, error) {
 			RunnerID:     r.RunnerID(),
 			RaceID:       r.RaceID(),
 			FinishTime:   r.FinishTime(),
-			Pace:         r.Pace(),
+			PaceMinPerKm: r.Pace(),
 			HeartRateAvg: r.HeartRateAvg(),
 			Notes:        r.Notes(),
 		}

@@ -50,5 +50,4 @@ func (c Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write([]byte(id.String()))
-	w.WriteHeader(http.StatusOK)
 }

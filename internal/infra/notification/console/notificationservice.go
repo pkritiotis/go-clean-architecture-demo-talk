@@ -22,6 +22,6 @@ func (NotificationService) Notify(notification notification.Notification) error 
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Notification Received: %v", string(jsonNotification))
+	fmt.Printf("Notification Received: %v\n", string(jsonNotification))
 	return nil
 }

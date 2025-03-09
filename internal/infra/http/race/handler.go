@@ -66,7 +66,6 @@ func (h Handler) CreateRace(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte(id.String()))
-	w.WriteHeader(http.StatusOK)
 }
 
 // AddResultRequestModel represents the request model for adding a race result
@@ -119,14 +118,11 @@ func (h Handler) AddResult(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-
-		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err.Error())
 		return
 	}
 
 	w.Write([]byte(id.String()))
-	w.WriteHeader(http.StatusOK)
 }
 
 // ResultResponse represents the response model for race results
@@ -170,7 +166,7 @@ func (h Handler) GetRaceResults(w http.ResponseWriter, r *http.Request) {
 			RunnerID:     result.RunnerID,
 			RaceID:       result.RaceID,
 			FinishTime:   result.FinishTime.Milliseconds(),
-			Pace:         result.Pace,
+			Pace:         result.PaceMinPerKm,
 			HeartRateAvg: result.HeartRateAvg,
 			Notes:        result.Notes,
 		}

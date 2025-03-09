@@ -12,14 +12,14 @@ type Result struct {
 	runnerID     uuid.UUID
 	raceID       uuid.UUID
 	finishTime   time.Duration
-	pace         float64 // min/km
+	paceMinPerKm float64 // min/km
 	heartRateAvg int
 	notes        string
 	loggedAt     time.Time
 }
 
-// NewRecord creates a new Result entity and validates the input
-func NewRecord(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float64, heartRateAvg int, notes string) (Result, error) {
+// NewResult creates a new Result entity and validates the input
+func NewResult(runnerID, raceID uuid.UUID, finishTime time.Duration, paceMinPerKm float64, heartRateAvg int, notes string) (Result, error) {
 	if runnerID == uuid.Nil {
 		return Result{}, fmt.Errorf("runnerID cannot be empty")
 	}
@@ -29,8 +29,8 @@ func NewRecord(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float6
 	if finishTime <= 0 {
 		return Result{}, fmt.Errorf("finishTime must be greater than 0")
 	}
-	if pace <= 0 {
-		return Result{}, fmt.Errorf("pace must be greater than 0")
+	if paceMinPerKm <= 0 {
+		return Result{}, fmt.Errorf("paceMinPerKm must be greater than 0")
 	}
 	if heartRateAvg < 0 {
 		return Result{}, fmt.Errorf("heartRateAvg cannot be negative")
@@ -41,7 +41,7 @@ func NewRecord(runnerID, raceID uuid.UUID, finishTime time.Duration, pace float6
 		runnerID:     runnerID,
 		raceID:       raceID,
 		finishTime:   finishTime,
-		pace:         pace,
+		paceMinPerKm: paceMinPerKm,
 		heartRateAvg: heartRateAvg,
 		notes:        notes,
 		loggedAt:     time.Now(),
@@ -68,9 +68,9 @@ func (r Result) FinishTime() time.Duration {
 	return r.finishTime
 }
 
-// Pace returns the pace
+// Pace returns the paceMinPerKm
 func (r Result) Pace() float64 {
-	return r.pace
+	return r.paceMinPerKm
 }
 
 // HeartRateAvg returns the average heart rate

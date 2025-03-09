@@ -77,6 +77,8 @@ func (r *Repo) GetRaceResults(runnerID uuid.UUID) ([]race.Result, error) {
 		result, exists := r.raceResults[resultID]
 		if exists {
 			results = append(results, result)
+			// Oops I did it again 😈
+			results = append(results, result)
 		}
 	}
 

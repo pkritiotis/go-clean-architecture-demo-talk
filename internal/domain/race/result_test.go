@@ -48,14 +48,14 @@ func TestRaceLogValidation(t *testing.T) {
 			wantErr:      "finishTime must be greater than 0",
 		},
 		{
-			name:         "Pace must be greater than zero",
+			name:         "PaceMinPerKm must be greater than zero",
 			runnerID:     uuid.New(),
 			raceID:       uuid.New(),
 			finishTime:   time.Hour,
 			pace:         0,
 			heartRateAvg: 150,
 			notes:        "Good race",
-			wantErr:      "pace must be greater than 0",
+			wantErr:      "paceMinPerKm must be greater than 0",
 		},
 		{
 			name:         "HeartRateAvg cannot be negative",
@@ -81,7 +81,7 @@ func TestRaceLogValidation(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			raceLog, err := NewRecord(tt.runnerID, tt.raceID, tt.finishTime, tt.pace, tt.heartRateAvg, tt.notes)
+			raceLog, err := NewResult(tt.runnerID, tt.raceID, tt.finishTime, tt.pace, tt.heartRateAvg, tt.notes)
 			if tt.wantErr != "" {
 				if err == nil || err.Error() != tt.wantErr {
 					t.Errorf("expected error '%v', got %v", tt.wantErr, err)
@@ -103,7 +103,7 @@ func TestRaceLogValidation(t *testing.T) {
 					t.Errorf("expected finishTime %v, got %v", tt.finishTime, raceLog.FinishTime())
 				}
 				if raceLog.Pace() != tt.pace {
-					t.Errorf("expected pace %v, got %v", tt.pace, raceLog.Pace())
+					t.Errorf("expected paceMinPerKm %v, got %v", tt.pace, raceLog.Pace())
 				}
 				if raceLog.HeartRateAvg() != tt.heartRateAvg {
 					t.Errorf("expected heartRateAvg %v, got %v", tt.heartRateAvg, raceLog.HeartRateAvg())

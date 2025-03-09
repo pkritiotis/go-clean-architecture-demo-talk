@@ -85,23 +85,36 @@ func TestService_LogRace(t *testing.T) {
 	}
 }
 
-func TestService_GetRaceLogs(t *testing.T) {
+func TestService_GetRaceResults(t *testing.T) {
 	mockRepo := new(mockRaceRepository)
 	service := NewService(mockRepo)
+	result1, _ := race.NewResult(uuid.New(), uuid.New(), 30*time.Minute, 5.0, 150, "First race")
 
 	tests := []struct {
 		name      string
 		runnerID  uuid.UUID
 		mockSetup func()
 		wantErr   error
+		expected  []ResultItem
 	}{
 		{
 			name:     "valid input",
 			runnerID: uuid.New(),
 			mockSetup: func() {
-				mockRepo.On("GetRaceResults", mock.Anything).Return([]race.Result{}, nil)
+				mockRepo.On("GetRaceResults", mock.Anything).Return([]race.Result{result1}, nil)
 			},
 			wantErr: nil,
+			expected: []ResultItem{
+				{
+					ID:           result1.ID(),
+					RunnerID:     result1.RunnerID(),
+					RaceID:       result1.RaceID(),
+					FinishTime:   result1.FinishTime(),
+					PaceMinPerKm: result1.Pace(),
+					HeartRateAvg: result1.HeartRateAvg(),
+					Notes:        result1.Notes(),
+				},
+			},
 		},
 		{
 			name:      "empty RunnerID",
@@ -109,14 +122,16 @@ func TestService_GetRaceLogs(t *testing.T) {
 			mockSetup: func() {},
 			wantErr:   ErrEmptyRunnerID,
 		},
-		// Add more test cases as needed
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mockSetup()
-			_, err := service.GetResults(tt.runnerID)
+			res, err := service.GetResults(tt.runnerID)
 			assert.Equal(t, tt.wantErr, err)
+			if err == nil {
+				assert.Equal(t, tt.expected, res)
+			}
 		})
 	}
 }
