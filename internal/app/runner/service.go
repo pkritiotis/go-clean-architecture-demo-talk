@@ -10,18 +10,12 @@ import (
 
 // Service provides runner operations.
 type Service struct {
-	repo                repository
+	repo                runner.Repository
 	notificationService notification.Service
 }
 
-type repository interface {
-	GetByID(id uuid.UUID) (*runner.Runner, error)
-	Add(runner *runner.Runner) error
-	Update(runner *runner.Runner) error
-}
-
 // NewService creates a new runner service.
-func NewService(repo repository, notificationService notification.Service) Service {
+func NewService(repo runner.Repository, notificationService notification.Service) Service {
 	return Service{repo: repo, notificationService: notificationService}
 }
 
