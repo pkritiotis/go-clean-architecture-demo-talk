@@ -3,9 +3,10 @@ package race
 
 import (
 	"errors"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/pkritiotis/go-clean-architecture-example/internal/domain/race"
-	"time"
 )
 
 // Error variables for input validation
@@ -105,6 +106,7 @@ func (s Service) GetResults(runnerID uuid.UUID) ([]ResultItem, error) {
 	return results, nil
 }
 
+// CreateRace validates and stores a new race
 func (s Service) CreateRace(name, location string, date time.Time, distanceKm, elevationGain float64) (uuid.UUID, error) {
 	r, err := race.NewRace(name, location, date, distanceKm, elevationGain)
 	if err != nil {
