@@ -3,8 +3,8 @@ workdir: internal
 allow:
   depOnAnyVendor: true
 components:
-  app:    { in: app/** }    
   domain: { in: domain/** } 
+  app:    { in: app/** }    
   infra:  { in: infra/** }  
 
 deps:
