@@ -3,9 +3,10 @@ package race
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/google/uuid"
 	"github.com/pkritiotis/go-clean-architecture-example/internal/domain/race"
-	"sync"
 )
 
 // Repo is an in-memory implementation of the race repository
@@ -77,7 +78,9 @@ func (r *Repo) GetRaceResults(runnerID uuid.UUID) ([]race.Result, error) {
 		result, exists := r.raceResults[resultID]
 		if exists {
 			results = append(results, result)
-			// Oops I did it again 😈
+			// 😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈
+			// 😈😈 Oops I did it again 😈😈
+			// 😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈
 			results = append(results, result)
 		}
 	}

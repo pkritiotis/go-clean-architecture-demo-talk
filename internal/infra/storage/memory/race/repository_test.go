@@ -91,7 +91,9 @@ func TestRepo_GetRaceResults(t *testing.T) {
 		wantErr  bool
 		expected []race.Result
 	}{
-		// Commenting out this test because it fails - I don't know why 😈
+		// 😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈
+		// 😈😈 Commenting out this test because it fails - I don't know why 😈😈
+		// 😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈😈
 		//{
 		//	name:     "valid runner ID",
 		//	runnerID: runnerID,
