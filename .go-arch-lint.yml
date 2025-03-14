@@ -1,0 +1,22 @@
+version: 3
+workdir: internal
+allow:
+  depOnAnyVendor: true
+components:
+  app:    { in: app/** }    
+  domain: { in: domain/** } 
+  infra:  { in: infra/** }  
+
+deps:
+  domain:
+    mayDependOn:
+      - domain
+  app:
+    mayDependOn:
+      - domain
+      - app
+  infra:
+    mayDependOn:
+      - domain
+      - app
+      - infra
