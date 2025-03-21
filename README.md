@@ -2,7 +2,7 @@
 
 This repository contains the source code used as a demo during my Athens Gophers Meetup presentation 'Clean Architecture in Go: Bridging Principles with Pragmatism" on the 14th of March 2025.
 
-You can also find the slides [here](./docs/slides/CleanArchitectureInGo_AthensGophers_14Mar2025) and some **examples** shared under `docs`
+You can also find the slides [here](./docs/slides/CleanArchitectureInGo_AthensGophers_14Mar2025.pdf) and some **examples** shared under `docs`
 
 For a more in-depth article and extended example, check out my blog post: [Clean Architecture in Go](https://pkritiotis.io/clean-architecture-in-golang/).
 
